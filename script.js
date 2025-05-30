@@ -106,7 +106,7 @@
         console.log(data);
         let csv = "Position,Title,Type,Published\n";
         for(let i = 0; i < data.length; i++){
-            csv += `${i},${data[i].title},${data[i].type},${data[i].published ? "Published" : "Not published"}\n`;
+            csv += `${i},"${data[i].title.trim()}",${data[i].type},${data[i].published ? "Published" : "Not published"}\n`;
         }
         return csv;
     }

@@ -26,6 +26,8 @@ content_file = "filename" # File from custom code
 activity_frame = get_df(activity_file, ["Content type", "Content Name", "Times viewed"])
 content_frame = get_df(content_file)
 
+print(content_frame.head())
+
 # Aggregate views
 aggregated_views = activity_frame.groupby("Content Name", as_index=False)["Times viewed"].sum()
 
