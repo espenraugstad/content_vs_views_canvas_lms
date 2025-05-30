@@ -13,45 +13,58 @@ def get_df(file, columns=None):
     Returns:
         pd.DataFrame: The loaded DataFrame.
     """
+    df = pd.read_csv(file)
+    df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_')
+    
     if columns:
-        return pd.read_csv(file, usecols=columns)
+        return df[columns]
     else:
-        return pd.read_csv(file)
+        return df
 
-# File names
+course = "coursename"
+
+# Files
+
+# Course name
 activity_file = "filename" # File from New Analytics
 content_file = "filename" # File from custom code
 
 # Dataframes
-activity_frame = get_df(activity_file, ["Content type", "Content Name", "Times viewed"])
+activity_frame = get_df(activity_file, ["content_type", "content_name", "times_viewed"])
 content_frame = get_df(content_file)
 
-print(content_frame.head())
-
 # Aggregate views
-aggregated_views = activity_frame.groupby("Content Name", as_index=False)["Times viewed"].sum()
+aggregated_views = activity_frame.groupby("content_name", as_index=False)["times_viewed"].sum()
+
+# Use the line below to only include published content
+content_frame = content_frame[content_frame["published"] == "Published"]
+
 
 # Merge the frames
 result_frame = pd.merge(
-    content_frame[['Position', 'Title']],
+    content_frame[['position', 'title']],
     aggregated_views,
-    left_on = 'Title',
-    right_on = 'Content Name',
+    left_on = 'title',
+    right_on = 'content_name',
     how = 'inner'
-).sort_values(by='Position').reset_index(drop=False)
+).sort_values(by='position').reset_index(drop=False)
 
 print(result_frame.head())
 
+if result_frame.shape[0] == 0:
+    print("No views found for module content.")
+    exit(0)
+
 # Extract range and values
 x = result_frame['index']
-y = result_frame['Times viewed']
+y = result_frame['times_viewed']
 
 # Plot the results
-result_frame.plot.scatter(x = 'index', y = 'Times viewed', label = "Views")
+result_frame.plot.scatter(x = 'index', y = 'times_viewed', label = "Views")
 
 plt.xlabel('Position on modules page')
 plt.ylabel('Number of Views')
-plt.title('Scatter Plot of Views per Content Entry')
+plt.title(f'Views per Module Entry for {course}')
 
 
 # Create a trend line
