@@ -19,11 +19,11 @@ def get_df(file, columns=None):
         return pd.read_csv(file)
 
 # File names
-# List of activities
-activity_file = "activity 28.5.2025 (3).csv"
+activity_file = "filename" # File from New Analytics
+content_file = "filename" # File from custom code
+
+# Dataframes
 activity_frame = get_df(activity_file, ["Content type", "Content Name", "Times viewed"])
-# List of content
-content_file = "Content_IKT902-1 25V Introduksjon til kunstig intelligens-teknologi.csv"
 content_frame = get_df(content_file)
 
 # Aggregate views
