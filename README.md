@@ -4,7 +4,11 @@ This code is used to examine the relationship between the position of items on a
 
 # How to use
 
-This tool requires two files. The first file can be obtained from Canvas' New Analytics Tool. Using this, go to the "Reports" tab and run a rapport for Course Activity. Download the csv file in the same folder as this file. This will be the activity file.
+This tool requires two files. The first file can be obtained from Canvas' New Analytics Tool. Using this, go to the "Weekly Online Activity" tab and click the download button to the left of the drop down menu that says "Chart options" (see screenshot below). 
+
+![Screenshot from New Analytics Weekly Online Activity](./screenshots/new_analytics.png) 
+
+Download the zip file and unpack it. Put the resources.csv file in the same folder as this file. This will be the activity file.
 
 To get the other file, the script that follows along here can be used with a browser extension such as [Tampermonkey](https://www.tampermonkey.net/). Create a new script in this extension, and copy the code from the file "script.js". You may have to change the url in line 7 to match the url of your institutions Canvas installation. Note that it may also _not_ work if your institution has a custom Canvas setup. If it works, a button will be added on the modules page that says "List content". Clicking this will download a csv file. Make sure it is saved in the same folder as this file. This will be the content file.
 

@@ -21,20 +21,16 @@ def get_df(file, columns=None):
     else:
         return df
 
-course = "coursename"
+course = "Course Name"
 
-# Files
-
+# File names
 # Course name
-activity_file = "filename" # File from New Analytics
-content_file = "filename" # File from custom code
+activity_file = "activity.csv" # File from New Analytics
+content_file = "content.csv" # File from custom code
 
 # Dataframes
-activity_frame = get_df(activity_file, ["content_type", "content_name", "times_viewed"])
+activity_frame = get_df(activity_file, ["resource", "page_views"])
 content_frame = get_df(content_file)
-
-# Aggregate views
-aggregated_views = activity_frame.groupby("content_name", as_index=False)["times_viewed"].sum()
 
 # Use the line below to only include published content
 content_frame = content_frame[content_frame["published"] == "Published"]
@@ -43,13 +39,13 @@ content_frame = content_frame[content_frame["published"] == "Published"]
 # Merge the frames
 result_frame = pd.merge(
     content_frame[['position', 'title']],
-    aggregated_views,
+    activity_frame,
     left_on = 'title',
-    right_on = 'content_name',
+    right_on = 'resource',
     how = 'inner'
 ).sort_values(by='position').reset_index(drop=False)
 
-print(result_frame.head())
+print(len(result_frame))
 
 if result_frame.shape[0] == 0:
     print("No views found for module content.")
@@ -57,10 +53,10 @@ if result_frame.shape[0] == 0:
 
 # Extract range and values
 x = result_frame['index']
-y = result_frame['times_viewed']
+y = result_frame['page_views']
 
 # Plot the results
-result_frame.plot.scatter(x = 'index', y = 'times_viewed', label = "Views")
+result_frame.plot.scatter(x = 'index', y = 'page_views', label = "Views")
 
 plt.xlabel('Position on modules page')
 plt.ylabel('Number of Views')
@@ -82,9 +78,6 @@ r_squared = 1 - (ss_residual / ss_total)
 plt.plot(x, trend_line, color='red', label="Trend line")
 
 # Annotate with slope and R²
-# Determine coordinates for placing text box
-x_pos = x.max() * 0.8  # 80% of the x-range
-y_pos = y.max() * 1.05  # Slightly above the max y-value
 equation_text = f"y = {slope:.2f}x + {intercept:.2f}\nR² = {r_squared:.3f}"
 plt.text(0.05, 0.95, equation_text, transform=plt.gca().transAxes, fontsize=10, verticalalignment='top', bbox=dict(facecolor='white', alpha=0.7))
 plt.legend()
